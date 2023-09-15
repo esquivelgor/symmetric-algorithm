@@ -1,47 +1,57 @@
+from src.utils.binary import transform_char_to_ascii
+import base64
+
 
 def encrypt_message(plain_text: str, key: str) -> str:
-    """
-    Encrypts a message using the RSA algorithm.
-    """
     return _confussion(plain_text, key)
 
-def _xor_strings(str1, str2):
-    
-    def _xor_binary_values(char1, char2):
-        binary_char1 = f"{ord(char1):08b}"
-        binary_char2 = f"{ord(char2):08b}"
-
-        result = ""
-
-        for bit1, bit2 in zip(binary_char1, binary_char2):
-            xor_result = "1" if bit1 != bit2 else "0"
-            result += xor_result
-
-        return result
-    
-    result = ""
-    key_length = len(str1)
-
-    for i, char2 in enumerate(str2):
-        char1 = str1[i % key_length]
-        xor_result = _xor_binary_values(char1, char2)
-        result += xor_result
-
-    return result 
+def _multiply_binary(binary_result: str, key_length: str):
+    key_binary = bin(key_length)
+    multiplied_result = int(binary_result, 2) * int(key_binary, 2)
+    return bin(multiplied_result)
 
 def _confussion(plain_text: str, key: str) -> str:
     
-    def _multiply_binary_result(binary_result, key_length):
-        multiplied_result = binary_result * key_length
-        return multiplied_result
+    key_ascii = []
+    plain_text_ascii = []
+    binary_array_result = []
     
-    xor_result = _xor_strings(key, plain_text)  # Assuming you have the xor_strings function from the previous response
-    key_length = len(key)
-    multiplied_result = _multiply_binary_result(xor_result, key_length)
+    for char in key:
+        key_ascii.append(transform_char_to_ascii(char))
+        
+    for char in plain_text:
+        plain_text_ascii.append(transform_char_to_ascii(char))
+    
+    for char_key in key_ascii:
+        operator = char_key
+        for char_message in plain_text_ascii:
+            xor_result = _xor_binary_values(operator, char_message)
+            multiplied_result = _multiply_binary(xor_result, len(key))
+            operator = multiplied_result
+        
+        binary_array_result.append(multiplied_result)
+        
+    base64_result = base64.b64encode(str(binary_array_result).encode('utf-8'))
+    
+    return binary_array_result, base64_result
 
-    return multiplied_result
-
-
+def _xor_binary_values(binary_char1: str, binary_char2: str) -> str:
+        """
+        XOR operation between 2 strings values in binary format.
+        Exmaple:
+        binary_char1 = "0b01000001"
+        binary_char2 = "0b01000010"
+        result = "0b00000011"
+        """
+        
+        # binary_char1 = f"{ord(char1):08b}"
+        # binary_char2 = f"{ord(char2):08b}"
+        
+        xor_decimal = int(binary_char1, 2) ^ int(binary_char2, 2)
+        
+        xor_result_binary = bin(xor_decimal)
+        
+        return xor_result_binary
 
 def _difussion(plain_text: str, key: str) -> str:
     """
