@@ -19,7 +19,6 @@ def _confussion_encrypt(plain_text: str, key: str) -> str:
         
     # Uncomment this to see in the console the ORDER
     # in which the operations are being done
-        
     # for char_message in plain_text:
     #     for key_char in key:
     #         print(char_message, key_char)
@@ -30,7 +29,7 @@ def _confussion_encrypt(plain_text: str, key: str) -> str:
             xor_result = xor_binary_values(operator, char_key)
             multiplied_result = multiply_binary(xor_result, len(key))
             operator = multiplied_result
-        
+            
         binary_array_result.append(multiplied_result)
         
     base64_result = base64.b64encode(str(binary_array_result).encode('utf-8'))

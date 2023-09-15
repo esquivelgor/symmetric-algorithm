@@ -13,8 +13,8 @@ async def encrypt(body: Message = Body()):
     binary_array_result, base64_result  = encrypt_message(plain_text=body.message, key=body.key)
     
     response = {
-        "binary": binary_array_result,
-        "base64": base64_result
+        "binary_encrypted": binary_array_result,
+        "base64_encrypted": base64_result
     }
 
     return JSONResponse(
