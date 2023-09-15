@@ -17,10 +17,10 @@ def _confussion_encrypt(plain_text: str, key: str) -> str:
     for char in plain_text:
         plain_text_ascii.append(transform_char_to_ascii(char))
     
-    for char_key in key_ascii:
-        operator = char_key
-        for char_message in plain_text_ascii:
-            xor_result = xor_binary_values(operator, char_message)
+    for char_message in plain_text_ascii:
+        operator = char_message
+        for char_key in key_ascii:
+            xor_result = xor_binary_values(operator, char_key)
             multiplied_result = multiply_binary(xor_result, len(key))
             operator = multiplied_result
         
