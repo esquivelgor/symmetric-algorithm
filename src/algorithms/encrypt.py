@@ -22,12 +22,12 @@ def encrypt_message(plain_text: str, key: str) -> str:
     for char_message in plain_text_ascii:
         operator = char_message
         for char_key in key_ascii:
-            confussion_result = _confussion_encrypt(operator, char_key, len(key))
-            # TODO: Call Difussion here with the result of the confussion
+            confussion_result_encrypt = _confussion_encrypt(operator, char_key, len(key))
+            # TODO: Call Difussion decrypt here with the result of the confussion
             # Then assign the result of the difussion to the operator
-            operator = confussion_result
+            operator = confussion_result_encrypt
             
-        binary_array_result.append(confussion_result)
+        binary_array_result.append(confussion_result_encrypt)
         
     base64_result = base64.b64encode(str(binary_array_result).encode('utf-8'))
     

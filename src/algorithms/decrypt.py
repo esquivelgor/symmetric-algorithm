@@ -11,26 +11,21 @@ def decrypt_message(encrypted_message: str, key: str) -> str:
     # transform string in formart of array to list of strings
     binary_array = binary_array_string.replace("[", "").replace("]", "").replace("'", "").split(", ")
     
-    
-    return _confussion_decrypt(binary_array, reversed_key)
-    
-
-def _confussion_decrypt(binary_array: list[str], key: str) -> str:
-
     key_ascii = []
     decrypted_in_binary_ascii = []
     
-    for char in key:
+    for char in reversed_key:
         key_ascii.append(transform_char_to_ascii(char))
     
     for binary in binary_array:
         operator = binary
         for char_key in key_ascii:
+            confussion_decrypt_result = _confussion_decrypt(operator, char_key, len(key))
             
-            divided_result = divide_binary(operator, len(key))
-            
-            xor_result = xor_binary_values(char_key, divided_result)
-            operator = xor_result
+            # TODO: Call Difussion Decrypt here with the result of the confussion decrypt
+            # Then assign the result of the difussion to the operator
+           
+            operator = confussion_decrypt_result
         
         decrypted_in_binary_ascii.append(operator)    
     
@@ -40,6 +35,13 @@ def _confussion_decrypt(binary_array: list[str], key: str) -> str:
     
     
     return decrypted_in_binary_ascii, decrypted_plain_text
+    
+
+def _confussion_decrypt(binary_char1: str, binary_char2: str, key_length: int) -> str:
+    divided_result = divide_binary(binary_char1, key_length)        
+    xor_result = xor_binary_values(binary_char2, divided_result)
+    
+    return xor_result
 
 def rollback_diffusion(encrypted_message: str, key: str) -> str:
     """
