@@ -43,7 +43,7 @@ def _confussion_decrypt(binary_char1: str, binary_char2: str, key_length: int) -
     
     return xor_result
 
-def rollback_diffusion(encrypted_message: str, key: str) -> str:
+def _difussion_decrypt(encrypted_message: str, key: str) -> str:
     """
     TODO
     """

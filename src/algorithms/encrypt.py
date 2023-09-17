@@ -40,7 +40,7 @@ def _confussion_encrypt(binary_char1: str, binary_char2: str, key_length: int):
     return multiplied_result
         
 
-def _difussion(plain_text: str, key: str) -> str:
+def _difussion_encrypt(plain_text: str, key: str) -> str:
     """
     TODO
     """
