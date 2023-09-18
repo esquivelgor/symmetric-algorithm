@@ -23,13 +23,13 @@ def encrypt_message(plain_text: str, key: str) -> str:
         operator = char_message
         for char_key in key_ascii:
             confussion_result_encrypt = _confussion_encrypt(operator, char_key, len(key))
-            difussion_result_encrypt = _difussion_encrypt(confussion_result_encrypt, char_key)
+            diffusion_result_encrypt = _diffusion_encrypt_shift(confussion_result_encrypt, char_key)
             
-            operator = difussion_result_encrypt
+            operator = confussion_result_encrypt # cambiar a diffusion_result_encrypt
 
         binary_array_result.append(operator)
-        
-    base64_result = base64.b64encode(str(binary_array_result).encode('utf-8'))
+    result_encrypt = _diffusion_encrypt_rotation(binary_array_result, key)
+    base64_result = base64.b64encode(str(result_encrypt).encode('utf-8'))
     
     return binary_array_result, base64_result
 
@@ -39,26 +39,50 @@ def _confussion_encrypt(binary_char1: str, binary_char2: str, key_length: int):
     return multiplied_result
         
 
-def _difussion_encrypt(binary_msg: str, key_char: str):
-    # Number of right shifts 
-    nrs = str(int(key_char, 2))
+def _diffusion_encrypt_shift(binary_msg: str, charKey: str):
+
     shifts = 0
-    
+    nrs = str(int(charKey, 2)) # Number of right shifts 
     for i in range(0, len(nrs)):
         if (shifts <= 7):
             shifts += int(nrs[i])
-    # (if n < 0 then shifting by 2 positions)
-    shifts = (shifts if shifts <= 8 else shifts - 8)
+    shifts = (shifts - 8 if shifts >= 9 else shifts)
+    
+    shifted_binary = shift(binary_msg, shifts)
+    #print("----------")
+    #print(shifts)
+    #print(binary_msg)
+    #print(shifted_binary)
+    #print("----------")
+    return shifted_binary
 
-    # Convert binary string to an integer
-    decimal_number = int(binary_msg, 2)
-    # Perform a bitwise shift right operation 
-    shifted_decimal = decimal_number >> shifts
-    # Convert the shifted decimal number back to a binary string
-    shifted_binary = bin(shifted_decimal)
+def _diffusion_encrypt_rotation(binary_msg: str, key: str):
+    
+    # We get all concatenation of values
+    fullBinaryMsg = list(''.join(binary_msg))
 
-    print(shifts)
-    print(binary_msg)
-    print(shifted_binary)
-    print("")
+    n = str(int(transform_char_to_ascii(key[-1]),2))
+    kn = 0
+    kn = sum(int(n[i]) for i in range(len(n)))
+    kn = int(str(kn)[-1])
+
+    
+    rotatedBinary = (fullBinaryMsg[kn:] + fullBinaryMsg[:kn])
+    result = ''.join(rotatedBinary)
+    print(result, fullBinaryMsg)
+    return result
+
+# Shift right
+def shift(binary_string: str, shifts: int):
+    #print(binary_string)
+    binary_string = str(format(int(binary_string,2), '08b'))
+    
+    #print(binary_string)
+    firstPart = binary_string[:shifts]
+    rest = binary_string[shifts:]
+    shifted = rest + firstPart
+    #print(shifted)
+    
+    shifted_binary = bin(int(shifted, 2))
+    #print(shifted_binary)
     return shifted_binary
