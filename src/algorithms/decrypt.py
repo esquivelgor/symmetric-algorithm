@@ -21,8 +21,8 @@ def decrypt_message(encrypted_message: str, key: str) -> str:
         operator = binary
         for char_key in key_ascii:
             confussion_decrypt_result = _confussion_decrypt(operator, char_key, len(key))
-            
-            operator = confussion_decrypt_result # debe de ir diffusion_decrypt_result
+            diffusion_decrypt_result = _diffusion_decrypt_shift(confussion_decrypt_result, char_key)
+            operator = confussion_decrypt_result ## cambiar a diffusion_decrypt
 
         binary_ascii.append(operator)   
     result_decrypt = _diffusion_encrypt_transposition(binary_ascii, key)
@@ -51,17 +51,16 @@ def _diffusion_encrypt_transposition(binary_msg: str, key: str):
 def _diffusion_decrypt_shift(encrypted_message: str, charKey: str):
     
     shifts = 0
-    nrs = str(int(charKey, 2)) # Number of left shifts 
+    nrs = str(int(charKey, 2)) # Number of shifts 
     for i in range(0, len(nrs)):
         if (shifts <= 7):
             shifts += int(nrs[i])
     shifts = (shifts - 8 if shifts >= 9 else shifts)
 
     binary_msg = shift(encrypted_message, shifts)
-    return encrypted_message
+    return binary_msg
 
 # Shift right (decrypt)
 def shift(binary_string: str, shifts: int):
-
-    return 1
+    return bin(int(binary_string, 2) >> shifts)
 

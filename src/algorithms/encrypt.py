@@ -17,7 +17,7 @@ def encrypt_message(plain_text: str, key: str) -> str:
         operator = char_message
         for char_key in key_ascii:
             confussion_result_encrypt = _confussion_encrypt(operator, char_key, len(key))
-            
+            diffusion_result_encrypt = _diffusion_encrypt_shift(operator, char_key)
             operator = confussion_result_encrypt # cambiar a diffusion_result_encrypt
 
         binary_array_result.append(operator)
@@ -40,21 +40,19 @@ def _diffusion_encrypt_transposition(binary_msg: str, key: str):
     
     return result
 
-def _diffusion_encrypt_shift(binary_msg: str, charKey: str):
+def _diffusion_encrypt_shift(binary_msg, charKey: str):
 
     shifts = 0
-    nrs = str(int(charKey, 2)) # Number of right shifts 
+    nrs = str(int(charKey, 2)) # Number of shifts 
     for i in range(0, len(nrs)):
         if (shifts <= 7):
             shifts += int(nrs[i])
     shifts = (shifts - 8 if shifts >= 9 else shifts)
     
     shifted_binary = shift(binary_msg, shifts)
-
-    return binary_msg
+    return shifted_binary
 
 # Shift left
-def shift(binary_string: str, shifts: int):
+def shift(binary_string, shifts: int):
+    return bin(int(binary_string,2) << shifts)
     
-    print(binary_string, char_key)
-    return 1
