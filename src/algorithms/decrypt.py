@@ -1,5 +1,11 @@
 import base64
-from src.utils.binary import transform_char_to_ascii, divide_binary, xor_binary_values, transform_ascii_to_char
+from src.utils.binary import(
+    transform_char_to_ascii,
+    divide_binary,
+    xor_binary_values,
+    transform_ascii_to_char,
+    shift_left
+)
 from fastapi import HTTPException, status
 
 
@@ -19,7 +25,8 @@ def decrypt_message(encrypted_message: str, key: str) -> str:
     binary_array = binary_array_string.replace("[", "").replace("]", "").replace("'", "").split(", ")
     
     key_ascii = []
-    binary_ascii = []
+    decrypted_in_binary_ascii = []
+    
     
     for char in reversed_key:
         key_ascii.append(transform_char_to_ascii(char))
@@ -27,19 +34,25 @@ def decrypt_message(encrypted_message: str, key: str) -> str:
     for binary in binary_array:
         operator = binary
         for char_key in key_ascii:
+            # print("Iterate over key: ", char_key)
+            # diffusion_decrypt_result = _diffusion_encrypt_transposition(operator, char_key)
             confussion_decrypt_result = _confussion_decrypt(operator, char_key, len(key))
-            diffusion_decrypt_result = _diffusion_decrypt_shift(confussion_decrypt_result, char_key)
-            operator = confussion_decrypt_result ## cambiar a diffusion_decrypt
+            # confussion_decrypt_result = _confussion_decrypt(operator, char_key, len(key))
+            # print("diffusion_decrypt_result: ", diffusion_decrypt_result)
+            
+            # operator = confussion_decrypt_result
+            operator = confussion_decrypt_result
 
-        binary_ascii.append(operator)   
-    result_decrypt = _diffusion_encrypt_transposition(binary_ascii, key)
+        decrypted_in_binary_ascii.append(operator)   
+    
+    difussion = _diffusion_encrypt_transposition(decrypted_in_binary_ascii, key)
     
     decrypted_plain_text = ""
-    for binary_ascii in result_decrypt:
+    for binary_ascii in difussion:
         decrypted_plain_text += transform_ascii_to_char(binary_ascii)
     
     
-    return result_decrypt, decrypted_plain_text
+    return difussion, decrypted_plain_text
     
 
 def _confussion_decrypt(binary_char1: str, binary_char2: str, key_length: int) -> str:
@@ -50,24 +63,25 @@ def _confussion_decrypt(binary_char1: str, binary_char2: str, key_length: int) -
 
 def _diffusion_encrypt_transposition(binary_msg: str, key: str):
     
+    # binary_msg = binary_msg[2:]
+    
     kn = len(key)
     result = binary_msg[kn:] + binary_msg[:kn]
     
     return result
 
-def _diffusion_decrypt_shift(encrypted_message: str, charKey: str):
+def _diffusion_decrypt_shift(binary_msg: str, charKey: str):
     
-    shifts = 0
-    nrs = str(int(charKey, 2)) # Number of shifts 
-    for i in range(0, len(nrs)):
-        if (shifts <= 7):
-            shifts += int(nrs[i])
-    shifts = (shifts - 8 if shifts >= 9 else shifts)
+    decimal_ascii_code = str(int(charKey, 2))
+    # print("decimal_ascii_code: ", decimal_ascii_code)
+    
+    number_of_shifts = sum([int(i) for i in decimal_ascii_code])
+    # print("number_of_shifts: ", number_of_shifts)
 
-    binary_msg = shift(encrypted_message, shifts)
-    return binary_msg
-
-# Shift right (decrypt)
-def shift(binary_string: str, shifts: int):
-    return bin(int(binary_string, 2) >> shifts)
+    number_of_shifts = (number_of_shifts - 8 if number_of_shifts >= 9 else number_of_shifts)
+    
+    number_of_shifts = 8
+    # print("number_of_shifts: ", number_of_shifts)
+    
+    return shift_left(binary_msg, number_of_shifts)
 

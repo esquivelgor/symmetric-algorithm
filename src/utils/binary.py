@@ -51,11 +51,36 @@ def xor_binary_values(binary_char1: str, binary_char2: str) -> str:
         # binary_char1 = f"{ord(char1):08b}"
         # binary_char2 = f"{ord(char2):08b}"
         
+        # the next line could be cause an error if the binary_char1 or binary_char2 are not in binary format
+        # len of 8 because the binary representation of a char is 8 bits
         xor_decimal = int(binary_char1, 2) ^ int(binary_char2, 2)
         
         xor_result_binary = bin(xor_decimal)
         
         return xor_result_binary
+
+def shift_right(binary_string, shifts: int) -> str:
+    binary_string = binary_string[2:]
+    
+    for _i in range(0, shifts):
+        binary_string = binary_string[-1] + binary_string[:-1]
+    
+    return f"0b{binary_string}"
+    
+    # shift right bitwise
+    # return bin(int(binary_string, 2) >> shifts)
+
+def shift_left(binary_string: str, shifts: int) -> str:    
+        
+    binary_string = binary_string[2:]
+    
+    for _i in range(0, shifts):
+        binary_string = binary_string[1:] + binary_string[0]
+    
+    return f"0b{binary_string}"
+
+    # shift left bitwise
+    # return bin(int(binary_string, 2) << shifts)
 
 # TESTS
 # Encrypt
@@ -70,3 +95,9 @@ def xor_binary_values(binary_char1: str, binary_char2: str) -> str:
 
 # print("Multiplicacion: ", multiply_binary("0b00010010", 8))
 # print("Division: ", divide_binary("0b010010000", 8))
+
+
+# Diffusion
+
+# print("Shift ->: ", shift_right("0b1110110", 8))
+# print("Shift <-: ", shift_left("0b0111011", 8))
