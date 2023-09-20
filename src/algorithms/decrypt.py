@@ -1,11 +1,18 @@
 import base64
 from src.utils.binary import transform_char_to_ascii, divide_binary, xor_binary_values, transform_ascii_to_char
+from fastapi import HTTPException, status
 
 
 def decrypt_message(encrypted_message: str, key: str) -> str:
 
-    
-    binary_array_string = base64.b64decode(encrypted_message).decode('utf-8')
+    try:
+        binary_array_string = base64.b64decode(encrypted_message).decode('utf-8')
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The encrypted is not a valid base64 string"
+        )
+        
     reversed_key = key[::-1]
     
     # transform string in formart of array to list of strings
