@@ -24,20 +24,7 @@ def divide_binary(binary_result: str, key_length: int) -> int:
     
     divided_result = int(binary_result, 2) // int(key_binary, 2)
     
-    
     return bin(divided_result)
-    
-    # print("divided_result: ", bin(divided_result))
-    
-    # mod = int(binary_result, 2) % int(key_binary, 2)
-    
-    # multiplication = multiply_binary(bin(divided_result), key_length)
-    
-
-    # # this is multiplication + mod, both in bin representation
-    # binary_result = int(multiplication, 2) + int(bin(mod), 2)
-   
-    # return bin(binary_result)
 
 def xor_binary_values(binary_char1: str, binary_char2: str) -> str:
         """
@@ -48,14 +35,34 @@ def xor_binary_values(binary_char1: str, binary_char2: str) -> str:
         result = "0b00000011"
         """
         
-        # binary_char1 = f"{ord(char1):08b}"
-        # binary_char2 = f"{ord(char2):08b}"
-        
         xor_decimal = int(binary_char1, 2) ^ int(binary_char2, 2)
         
         xor_result_binary = bin(xor_decimal)
         
         return xor_result_binary
+    
+def shift_right(binary_string, shifts: int) -> str:
+    binary_string = binary_string[2:]
+    
+    for _i in range(0, shifts):
+        binary_string = binary_string[-1] + binary_string[:-1]
+    
+    return f"0b{binary_string}"
+    
+    # shift right bitwise
+    # return bin(int(binary_string, 2) >> shifts)
+
+def shift_left(binary_string: str, shifts: int) -> str:    
+    
+    binary_string = binary_string[2:]
+    
+    for _i in range(0, shifts):
+        binary_string = binary_string[1:] + binary_string[0]
+    
+    return f"0b{binary_string}"
+
+    # shift left bitwise
+    # return bin(int(binary_string, 2) << shifts)
 
 # TESTS
 # Encrypt
