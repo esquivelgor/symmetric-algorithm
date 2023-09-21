@@ -50,6 +50,10 @@ button:hover {
 .result {
     margin-top: 20px;
 }
+.result {
+    max-width: 400px;
+    overflow: auto;
+}
 
 h2 {
     color: #333;
