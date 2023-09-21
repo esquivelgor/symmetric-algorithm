@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt and Decrypt Messages</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Encrypt Messages</h1>
+        <label for="keyInputEncrypt">Key:</label>
+        <input type="text" id="keyInputEncrypt" placeholder="Enter key">
+        <br>
+        <label for="messageInput">Message:</label>
+        <input type="text" id="messageInput" placeholder="Enter message">
+        <br>
+        <button id="submitEncryptButton">Submit</button>
+        <br>
+        <div class="result">
+            <h2>Result:</h2>
+            <div id="binaryResultText"></div>
+            <div id="base64ResultText"></div>
+        </div>
+
+        <h1>Decrypt Messages</h1>
+        <label for="keyInputDecrypt">Key:</label>
+        <input type="text" id="keyInputDecrypt" placeholder="Enter key">
+        <br>
+        <label for="encryptInput">Encryped Message:</label>
+        <input type="text" id="encryptInput" placeholder="Enter encrypted message">
+        <br>
+        <button id="submitDecryptButton">Submit</button>
+        <br>
+        <div class="result">
+            <h2>Result:</h2>
+            <div id="DecryptedPlainText"></div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
